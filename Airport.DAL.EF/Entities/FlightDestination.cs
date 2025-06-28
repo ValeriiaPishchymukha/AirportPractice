@@ -13,7 +13,7 @@ namespace Airport.DAL.EF.Entities
         public int AirportId { get; set; }
         public AirportEntity Airport { get; set; }
 
-        public string Departure { get; set; }
+        public DateTime Departure { get; set; }
 
         public int AircraftId { get; set; }
         public Aircraft Aircraft { get; set; }
