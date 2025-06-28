@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Airport.DAL.EF.Entities
 {
-    public class Passenger
+    public class AirportEntity
     {
         public int Id { get; set; }
-        public string FullName { get; set; }
-        public string Email { get; set; }
+        public string Name { get; set; }
+        public string Country { get; set; }
 
-       public ICollection<FlightDestination> FlightDestinations { get; set; }
+        public ICollection<FlightDestination> FlightDestinations { get; set; }
     }
 }

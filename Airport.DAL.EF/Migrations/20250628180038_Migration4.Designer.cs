@@ -3,6 +3,7 @@ using Airport.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Airport.DAL.EF.Migrations
 {
     [DbContext(typeof(AirportDbContext))]
-    partial class AirportDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250628180038_Migration4")]
+    partial class Migration4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,63 +75,6 @@ namespace Airport.DAL.EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AircraftTypes");
-                });
-
-            modelBuilder.Entity("Airport.DAL.EF.Entities.AirportEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Airports");
-                });
-
-            modelBuilder.Entity("Airport.DAL.EF.Entities.FlightDestination", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AircraftId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AirportId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Departure")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PassengerId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TicketPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AircraftId");
-
-                    b.HasIndex("AirportId");
-
-                    b.HasIndex("PassengerId");
-
-                    b.ToTable("FlightDestinations");
                 });
 
             modelBuilder.Entity("Airport.DAL.EF.Entities.Passenger", b =>
@@ -205,33 +151,6 @@ namespace Airport.DAL.EF.Migrations
                     b.Navigation("AircraftType");
                 });
 
-            modelBuilder.Entity("Airport.DAL.EF.Entities.FlightDestination", b =>
-                {
-                    b.HasOne("Airport.DAL.EF.Entities.Aircraft", "Aircraft")
-                        .WithMany("FlightDestinations")
-                        .HasForeignKey("AircraftId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Airport.DAL.EF.Entities.AirportEntity", "Airport")
-                        .WithMany("FlightDestinations")
-                        .HasForeignKey("AirportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Airport.DAL.EF.Entities.Passenger", "Passenger")
-                        .WithMany("FlightDestinations")
-                        .HasForeignKey("PassengerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Aircraft");
-
-                    b.Navigation("Airport");
-
-                    b.Navigation("Passenger");
-                });
-
             modelBuilder.Entity("Airport.DAL.EF.Entities.PilotAircraft", b =>
                 {
                     b.HasOne("Airport.DAL.EF.Entities.Aircraft", "Aircraft")
@@ -253,24 +172,12 @@ namespace Airport.DAL.EF.Migrations
 
             modelBuilder.Entity("Airport.DAL.EF.Entities.Aircraft", b =>
                 {
-                    b.Navigation("FlightDestinations");
-
                     b.Navigation("PilotAircrafts");
                 });
 
             modelBuilder.Entity("Airport.DAL.EF.Entities.AircraftType", b =>
                 {
                     b.Navigation("Aircrafts");
-                });
-
-            modelBuilder.Entity("Airport.DAL.EF.Entities.AirportEntity", b =>
-                {
-                    b.Navigation("FlightDestinations");
-                });
-
-            modelBuilder.Entity("Airport.DAL.EF.Entities.Passenger", b =>
-                {
-                    b.Navigation("FlightDestinations");
                 });
 
             modelBuilder.Entity("Airport.DAL.EF.Entities.Pilot", b =>
