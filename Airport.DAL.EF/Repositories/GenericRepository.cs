@@ -11,8 +11,8 @@ namespace Airport.DAL.EF.Repositories
 {
     public class GenericRepository<Entity> : IGenericRepository<Entity> where Entity : BaseModel
     {
-        private readonly AirportDbContext _context;
-        private DbSet<Entity> _dbSet;
+        public readonly AirportDbContext _context;
+        public DbSet<Entity> _dbSet;
         public GenericRepository(AirportDbContext context)
         {
             _context = context;
