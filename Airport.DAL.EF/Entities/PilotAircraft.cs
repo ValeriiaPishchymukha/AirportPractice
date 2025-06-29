@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Airport.DAL.EF.Entities.HelpModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
