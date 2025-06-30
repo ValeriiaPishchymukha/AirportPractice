@@ -11,5 +11,7 @@ namespace Airport.DAL.EF.Interfaces
     {
         Task<Passenger> GetByEmailAsync(string email);
         Task<List<Passenger>> SearchByNameAsync(string partialName);
+        Task<List<(string AirportName, string Country)>> GetDestinationsByPassengerNameAsync(string fullName);
+
     }
 }

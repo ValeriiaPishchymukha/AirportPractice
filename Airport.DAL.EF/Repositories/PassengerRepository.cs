@@ -26,5 +26,20 @@ namespace Airport.DAL.EF.Repositories
                 .Where(p => p.FullName.Contains(partialName))
                 .ToListAsync();
         }
+
+        public async Task<List<(string AirportName, string Country)>> GetDestinationsByPassengerNameAsync(string fullName)
+        {
+            var passenger = await _context.Passengers
+                .Include(p => p.FlightDestinations)
+                .ThenInclude(fd => fd.Airport)
+                .FirstOrDefaultAsync(p => p.FullName == fullName);
+
+            if (passenger == null || passenger.FlightDestinations == null)
+                return new List<(string, string)>();
+
+            return passenger.FlightDestinations
+                .Select(fd => (fd.Airport.Name, fd.Airport.Country))
+                .ToList();
+        }
     }
 }
