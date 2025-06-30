@@ -1,4 +1,5 @@
 using Airport.DAL.EF;
+using Airport.DAL.EF.Interfaces;
 using Airport.DAL.EF.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,7 +31,7 @@ namespace WebApplicationAirport
             }
 
 
-            builder.Services.AddTransient(typeof(GenericRepository<>));
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             app.UseHttpsRedirection();
 

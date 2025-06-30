@@ -11,7 +11,6 @@ namespace Airport.DAL.EF.Entities
     {
         public string TypeName { get; set; }
 
-
         public ICollection<Aircraft> Aircrafts { get; set; }
     }
 }

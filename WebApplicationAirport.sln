@@ -4,8 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationAirport", "WebApplicationAirport\WebApplicationAirport.csproj", "{4D7324B1-4B6E-4049-AF7A-E2D0C4F41482}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9FD827B-FF9E-440B-A736-7CEB8CD1E501} = {F9FD827B-FF9E-440B-A736-7CEB8CD1E501}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airport.DAL.EF", "Airport.DAL.EF\Airport.DAL.EF.csproj", "{2B38505C-6FC6-4FA5-A0DF-FABCF3AF9176}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airport.BLL", "Airport.BLL\Airport.BLL.csproj", "{F9FD827B-FF9E-440B-A736-7CEB8CD1E501}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{2B38505C-6FC6-4FA5-A0DF-FABCF3AF9176}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B38505C-6FC6-4FA5-A0DF-FABCF3AF9176}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B38505C-6FC6-4FA5-A0DF-FABCF3AF9176}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9FD827B-FF9E-440B-A736-7CEB8CD1E501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9FD827B-FF9E-440B-A736-7CEB8CD1E501}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9FD827B-FF9E-440B-A736-7CEB8CD1E501}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9FD827B-FF9E-440B-A736-7CEB8CD1E501}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
