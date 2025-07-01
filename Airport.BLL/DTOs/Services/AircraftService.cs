@@ -2,6 +2,8 @@
 using Airport.BLL.DTOs.Responses;
 using Airport.BLL.DTOs.Services.Interfaces;
 using Airport.DAL.EF.Entities;
+using Airport.DAL.EF.Entities.HelpModels;
+using Airport.DAL.EF.Helpers;
 using Airport.DAL.EF.Interfaces;
 using AutoMapper;
 using System;
@@ -23,10 +25,18 @@ namespace Airport.BLL.DTOs.Services
             _mapper = mapper;
         }
 
-        public async Task<List<AircraftShortResponseDTO>> GetAllAsync()
+        public async Task<List<AircraftShortResponseDTO>> GetAllAsync(Parameters parameters)
         {
-            var aircrafts = await _repository.GetAllAsync();
-            return _mapper.Map<List<AircraftShortResponseDTO>>(aircrafts);
+            var aircrafts = await _repository.GetAllAsync(parameters);
+            var dtoItems = _mapper.Map<List<AircraftShortResponseDTO>>(aircrafts);
+
+            return new PagedList<AircraftShortResponseDTO>(
+                dtoItems,
+                aircrafts.TotalCount,
+                aircrafts.PageNumber,
+                aircrafts.PageSize
+            );
+
         }
 
         public async Task<AircraftFullResponseDTO> GetByIDAsync(int id)

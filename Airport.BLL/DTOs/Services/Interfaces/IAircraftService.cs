@@ -1,5 +1,6 @@
 ﻿using Airport.BLL.DTOs.Requests;
 using Airport.BLL.DTOs.Responses;
+using Airport.DAL.EF.Entities.HelpModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Airport.BLL.DTOs.Services.Interfaces
 {
     public interface IAircraftService
     {
-        Task<List<AircraftShortResponseDTO>> GetAllAsync();
+        Task<List<AircraftShortResponseDTO>> GetAllAsync(Parameters parameters);
         Task<AircraftFullResponseDTO> GetByIDAsync(int id);
         Task<List<AircraftShortResponseDTO>> GetByManufacturerAsync(string manufacturer);
         Task<List<AircraftShortResponseDTO>> GetByModelAsync(string model);

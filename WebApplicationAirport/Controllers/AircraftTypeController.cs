@@ -1,6 +1,9 @@
 ﻿using Airport.BLL.DTOs.Requests;
 using Airport.BLL.DTOs.Responses;
+using Airport.BLL.DTOs.Services;
 using Airport.BLL.DTOs.Services.Interfaces;
+using Airport.DAL.EF.Entities.HelpModels;
+using Airport.DAL.EF.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplicationAirport.Controllers
@@ -17,10 +20,10 @@ namespace WebApplicationAirport.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<AircraftTypeResponseDTO>>> GetAll()
+        public async Task<ActionResult<PagedList<AircraftTypeResponseDTO>>> GetAll([FromQuery] Parameters parameters)
         {
-            var types = await _aircraftTypeService.GetAllAsync();
-            return Ok(types);
+            var pagedResult = await _aircraftTypeService.GetAllAsync(parameters);
+            return Ok(pagedResult);
         }
 
         [HttpGet("{id}")]

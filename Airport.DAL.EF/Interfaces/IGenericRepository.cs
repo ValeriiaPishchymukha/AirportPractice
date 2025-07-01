@@ -1,4 +1,5 @@
 ﻿using Airport.DAL.EF.Entities.HelpModels;
+using Airport.DAL.EF.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Airport.DAL.EF.Interfaces
 {
     public interface IGenericRepository<Entity> where Entity : BaseModel
     {
-        Task<List<Entity>> GetAllAsync();
+        Task<PagedList<Entity>> GetAllAsync(Parameters parameters);
         Task<Entity> GetByIDAsync(int id);
         Task CreateAsync(Entity entity);
         void Update(Entity entity);

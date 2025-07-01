@@ -1,4 +1,5 @@
 ﻿using Airport.DAL.EF.Entities.HelpModels;
+using Airport.DAL.EF.Helpers;
 using Airport.DAL.EF.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,9 +20,11 @@ namespace Airport.DAL.EF.Repositories
             _dbSet = _context.Set<Entity>();
         }
 
-        public async Task<List<Entity>> GetAllAsync()
+        public async Task<PagedList<Entity>> GetAllAsync(Parameters parameters)
         {
-            return await _dbSet.ToListAsync();
+            var query = _dbSet.AsQueryable();
+
+            return await PagedList<Entity>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
         }
 
         public virtual async Task<Entity> GetByIDAsync(int id)
