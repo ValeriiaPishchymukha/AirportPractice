@@ -29,7 +29,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName));
 
         CreateMap<Pilot, PilotFullResponseDTO>()
-            .ForMember(dest => dest.Aircrafts, opt => opt.MapFrom(src => src.PilotAircrafts.Select(pa => pa.Aircraft)));
+            .ForMember(dest => dest.Aircrafts, opt => opt.MapFrom(src => src.PilotAircrafts.Select(pa => pa.Aircraft).ToList()));
+
 
 
 

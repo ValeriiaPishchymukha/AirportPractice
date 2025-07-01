@@ -27,7 +27,7 @@ namespace Airport.DAL.EF.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<(string AirportName, string Country)>> GetDestinationsByPassengerNameAsync(string fullName)
+        public async Task<List<AirportEntity>> GetDestinationsByPassengerNameAsync(string fullName)
         {
             var passenger = await _context.Passengers
                 .Include(p => p.FlightDestinations)
@@ -35,10 +35,10 @@ namespace Airport.DAL.EF.Repositories
                 .FirstOrDefaultAsync(p => p.FullName == fullName);
 
             if (passenger == null || passenger.FlightDestinations == null)
-                return new List<(string, string)>();
+                return new List<AirportEntity>();
 
             return passenger.FlightDestinations
-                .Select(fd => (fd.Airport.Name, fd.Airport.Country))
+                .Select(fd => fd.Airport)
                 .ToList();
         }
     }

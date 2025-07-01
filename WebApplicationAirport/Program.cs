@@ -1,3 +1,5 @@
+using Airport.BLL.DTOs.Services;
+using Airport.BLL.DTOs.Services.Interfaces;
 using Airport.DAL.EF;
 using Airport.DAL.EF.Interfaces;
 using Airport.DAL.EF.Repositories;
@@ -14,7 +16,30 @@ namespace WebApplicationAirport
             builder.Services.AddDbContext<AirportDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Add services to the container.
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+
+            builder.Services.AddScoped<IAircraftService, AircraftService>();
+            builder.Services.AddScoped<IAircraftRepository, AircraftRepository>();
+
+            builder.Services.AddScoped<IAircraftTypeService, AircraftTypeService>();
+            builder.Services.AddScoped<IAircraftTypeRepository, AircraftTypeRepository>();
+
+
+            builder.Services.AddScoped<IAirportEntityService, AirportEntityService>();
+            builder.Services.AddScoped<IAirportEntityRepository, AirportEntityRepository>();
+
+
+            builder.Services.AddScoped<IFlightDestinationService, FlightDestinationService>();
+            builder.Services.AddScoped<IFlightDestinationRepository, FlightDestinationRepository>();
+
+            builder.Services.AddScoped<IPassengerService, PassengerService>();
+            builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
+
+            builder.Services.AddScoped<IPilotService, PilotService>();
+            builder.Services.AddScoped<IPilotRepository, PilotRepository>();
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -30,8 +55,6 @@ namespace WebApplicationAirport
                 app.UseSwaggerUI();
             }
 
-
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             app.UseHttpsRedirection();
 

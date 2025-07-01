@@ -14,6 +14,15 @@ namespace Airport.DAL.EF.Repositories
         public FlightDestinationRepository(AirportDbContext context) : base(context) { 
         }
 
+        public override async Task<FlightDestination> GetByIDAsync(int id)
+        {
+            return await _context.Set<FlightDestination>()
+                .Include(fd => fd.Airport)
+                .Include(fd => fd.Aircraft)
+                .Include(fd => fd.Passenger)
+                .FirstOrDefaultAsync(fd => fd.Id == id);
+        }
+
         public async Task<List<FlightDestination>> GetFlightsByPassengerAsync(int passengerId)
         {
             return await _context.FlightDestinations
@@ -40,6 +49,26 @@ namespace Airport.DAL.EF.Repositories
             return await _context.FlightDestinations
                 .Where(fd => fd.AirportId == airportId)
                 .ToListAsync();
+        }
+
+        public override void Update(FlightDestination entity)
+        {
+            if (entity.Airport != null)
+            {
+                _context.Entry(entity.Airport).State = EntityState.Modified;
+            }
+
+            if (entity.Aircraft != null)
+            {
+                _context.Entry(entity.Aircraft).State = EntityState.Modified;
+            }
+
+            if (entity.Passenger != null)
+            {
+                _context.Entry(entity.Passenger).State = EntityState.Modified;
+            }
+
+            _context.Set<FlightDestination>().Update(entity);
         }
     }
 }

@@ -15,6 +15,15 @@ namespace Airport.DAL.EF.Repositories
         {
         }
 
+        public async Task<Aircraft> GetByIDAsync(int id)
+        {
+            return await _context.Aircrafts
+                .Include(a => a.AircraftType) 
+                .Include(a => a.PilotAircrafts) 
+                    .ThenInclude(pa => pa.Pilot) 
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
         public async Task<List<Aircraft>> GetByManufacturerAsync(string manufacturer)
         {
             return await _context.Aircrafts
@@ -43,6 +52,30 @@ namespace Airport.DAL.EF.Repositories
                 .ToListAsync();
         }
 
+        public override void Update(Aircraft entity)
+        {
+            var existingPilotAircrafts = _context.Set<PilotAircraft>()
+                .Where(pa => pa.AircraftId == entity.Id)
+                .ToList();
+
+            foreach (var existingPa in existingPilotAircrafts)
+            {
+                if (!entity.PilotAircrafts.Any(pa => pa.PilotId == existingPa.PilotId))
+                {
+                    _context.Set<PilotAircraft>().Remove(existingPa);
+                }
+            }
+
+            foreach (var newPa in entity.PilotAircrafts)
+            {
+                if (!existingPilotAircrafts.Any(pa => pa.PilotId == newPa.PilotId))
+                {
+                    _context.Set<PilotAircraft>().Add(newPa);
+                }
+            }
+
+            _dbSet.Update(entity);
+        }
     }
 
     

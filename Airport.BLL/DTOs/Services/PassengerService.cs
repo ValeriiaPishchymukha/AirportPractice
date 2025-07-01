@@ -47,9 +47,10 @@ namespace Airport.BLL.DTOs.Services
             return _mapper.Map<List<PassengerResponseDTO>>(passengers);
         }
 
-        public async Task<List<(string AirportName, string Country)>> GetDestinationsByPassengerNameAsync(string fullName)
+        public async Task<List<AirportEntityResponseDTO>> GetDestinationsByPassengerNameAsync(string fullName)
         {
-            return await _repository.GetDestinationsByPassengerNameAsync(fullName);
+            var airports = await _repository.GetDestinationsByPassengerNameAsync(fullName);
+            return _mapper.Map<List<AirportEntityResponseDTO>>(airports);
         }
 
         public async Task CreateAsync(PassengerReqDTO dto)

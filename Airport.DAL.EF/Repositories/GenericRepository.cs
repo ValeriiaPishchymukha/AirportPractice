@@ -24,7 +24,7 @@ namespace Airport.DAL.EF.Repositories
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<Entity> GetByIDAsync(int id)
+        public virtual async Task<Entity> GetByIDAsync(int id)
         {
             return await _dbSet.FirstOrDefaultAsync(e => e.Id == id);
         }
@@ -34,7 +34,7 @@ namespace Airport.DAL.EF.Repositories
             await _dbSet.AddAsync(entity);
         }
 
-        public void Update(Entity entity)
+        public virtual void Update(Entity entity)
         {
             _dbSet.Update(entity);
         }

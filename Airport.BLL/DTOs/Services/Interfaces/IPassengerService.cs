@@ -14,7 +14,7 @@ namespace Airport.BLL.DTOs.Services.Interfaces
         Task<PassengerResponseDTO> GetByIdAsync(int id);
         Task<PassengerResponseDTO> GetByEmailAsync(string email);
         Task<List<PassengerResponseDTO>> SearchByNameAsync(string partialName);
-        Task<List<(string AirportName, string Country)>> GetDestinationsByPassengerNameAsync(string fullName);
+        Task<List<AirportEntityResponseDTO>> GetDestinationsByPassengerNameAsync(string fullName);
         Task CreateAsync(PassengerReqDTO dto);
         Task UpdateAsync(int id, PassengerReqDTO dto);
         Task DeleteAsync(int id);
