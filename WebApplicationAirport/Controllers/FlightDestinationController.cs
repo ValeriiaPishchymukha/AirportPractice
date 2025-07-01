@@ -3,6 +3,7 @@ using Airport.BLL.DTOs.Responses;
 using Airport.BLL.DTOs.Services;
 using Airport.BLL.DTOs.Services.Interfaces;
 using Airport.DAL.EF.Entities.HelpModels;
+using Airport.DAL.EF.Entities.HelpModels.Filtration;
 using Airport.DAL.EF.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ namespace WebApplicationAirport.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedList<FlightDestinationShortResponseDTO>>> GetAll([FromQuery] Parameters parameters)
+        public async Task<ActionResult<PagedList<FlightDestinationShortResponseDTO>>> GetAll([FromQuery] FlightDestinationParameters parameters)
         {
             var pagedResult = await _flightDestinationService.GetAllAsync(parameters);
             return Ok(pagedResult);

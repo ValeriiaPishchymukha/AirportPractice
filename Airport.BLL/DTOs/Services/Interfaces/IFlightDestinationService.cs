@@ -1,6 +1,7 @@
 ﻿using Airport.BLL.DTOs.Requests;
 using Airport.BLL.DTOs.Responses;
 using Airport.DAL.EF.Entities.HelpModels;
+using Airport.DAL.EF.Entities.HelpModels.Filtration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Airport.BLL.DTOs.Services.Interfaces
 {
     public interface IFlightDestinationService
     {
-        Task<List<FlightDestinationShortResponseDTO>> GetAllAsync(Parameters parameters);
+        Task<List<FlightDestinationShortResponseDTO>> GetAllAsync(FlightDestinationParameters parameters);
         Task<FlightDestinationFullResponseDTO> GetByIDAsync(int id);
         Task<List<FlightDestinationShortResponseDTO>> GetFlightsByPassengerAsync(int passengerId);
         Task<List<FlightDestinationShortResponseDTO>> GetUpcomingFlightsAsync(DateTime afterDate);

@@ -1,4 +1,6 @@
 ﻿using Airport.DAL.EF.Entities;
+using Airport.DAL.EF.Entities.HelpModels.Filtration;
+using Airport.DAL.EF.Helpers;
 using Airport.DAL.EF.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,6 +15,27 @@ namespace Airport.DAL.EF.Repositories
     {
         public AircraftRepository(AirportDbContext context) : base(context)
         {
+        }
+        public async Task<PagedList<Aircraft>> GetAllAsync(AircraftParameters parameters)
+        {
+            var query = _dbSet.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(parameters.Manufacturer))
+                query = query.Where(a => a.Manufacturer.Contains(parameters.Manufacturer));
+
+            if (!string.IsNullOrWhiteSpace(parameters.Model))
+                query = query.Where(a => a.Model.Contains(parameters.Model));
+
+            if (parameters.MinYear.HasValue)
+                query = query.Where(a => a.Year >= parameters.MinYear.Value);
+
+            if (parameters.MaxYear.HasValue)
+                query = query.Where(a => a.Year <= parameters.MaxYear.Value);
+
+            if (parameters.MaxFlightHours.HasValue)
+                query = query.Where(a => a.FlightHours <= parameters.MaxFlightHours.Value);
+
+            return await PagedList<Aircraft>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
         }
 
         public async Task<Aircraft> GetByIDAsync(int id)

@@ -1,4 +1,6 @@
 ﻿using Airport.DAL.EF.Entities;
+using Airport.DAL.EF.Entities.HelpModels.Filtration;
+using Airport.DAL.EF.Helpers;
 using Airport.DAL.EF.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,13 +16,32 @@ namespace Airport.DAL.EF.Repositories
         public FlightDestinationRepository(AirportDbContext context) : base(context) { 
         }
 
-        public override async Task<FlightDestination> GetByIDAsync(int id)
+        public async Task<PagedList<FlightDestination>> GetAllAsync(FlightDestinationParameters parameters)
         {
-            return await _context.Set<FlightDestination>()
-                .Include(fd => fd.Airport)
-                .Include(fd => fd.Aircraft)
-                .Include(fd => fd.Passenger)
-                .FirstOrDefaultAsync(fd => fd.Id == id);
+            var query = _dbSet.AsQueryable();
+
+            if (parameters.AirportId.HasValue)
+                query = query.Where(fd => fd.AirportId == parameters.AirportId.Value);
+
+            if (parameters.PassengerId.HasValue)
+                query = query.Where(fd => fd.PassengerId == parameters.PassengerId.Value);
+
+            if (parameters.AircraftId.HasValue)
+                query = query.Where(fd => fd.AircraftId == parameters.AircraftId.Value);
+
+            if (parameters.DepartureAfter.HasValue)
+                query = query.Where(fd => fd.Departure >= parameters.DepartureAfter.Value);
+
+            if (parameters.DepartureBefore.HasValue)
+                query = query.Where(fd => fd.Departure <= parameters.DepartureBefore.Value);
+
+            if (parameters.MinTicketPrice.HasValue)
+                query = query.Where(fd => fd.TicketPrice >= parameters.MinTicketPrice.Value);
+
+            if (parameters.MaxTicketPrice.HasValue)
+                query = query.Where(fd => fd.TicketPrice <= parameters.MaxTicketPrice.Value);
+
+            return await PagedList<FlightDestination>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
         }
 
         public async Task<List<FlightDestination>> GetFlightsByPassengerAsync(int passengerId)

@@ -1,4 +1,6 @@
 ﻿using Airport.DAL.EF.Entities;
+using Airport.DAL.EF.Entities.HelpModels.Filtration;
+using Airport.DAL.EF.Helpers;
 using Airport.DAL.EF.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,6 +15,18 @@ namespace Airport.DAL.EF.Repositories
     {
         public PassengerRepository(AirportDbContext context) : base(context)
         {
+        }
+        public async Task<PagedList<Passenger>> GetAllAsync(PassengerParameters parameters)
+        {
+            var query = _dbSet.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(parameters.FullName))
+                query = query.Where(p => p.FullName.Contains(parameters.FullName));
+
+            if (!string.IsNullOrWhiteSpace(parameters.Email))
+                query = query.Where(p => p.Email.Contains(parameters.Email));
+
+            return await PagedList<Passenger>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
         }
 
         public async Task<Passenger> GetByEmailAsync(string email)

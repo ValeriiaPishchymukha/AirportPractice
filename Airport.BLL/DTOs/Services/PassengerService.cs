@@ -3,6 +3,7 @@ using Airport.BLL.DTOs.Responses;
 using Airport.BLL.DTOs.Services.Interfaces;
 using Airport.DAL.EF.Entities;
 using Airport.DAL.EF.Entities.HelpModels;
+using Airport.DAL.EF.Entities.HelpModels.Filtration;
 using Airport.DAL.EF.Helpers;
 using Airport.DAL.EF.Interfaces;
 using AutoMapper;
@@ -25,7 +26,7 @@ namespace Airport.BLL.DTOs.Services
             _mapper = mapper;
         }
 
-        public async Task<List<PassengerResponseDTO>> GetAllAsync(Parameters parameters)
+        public async Task<List<PassengerResponseDTO>> GetAllAsync(PassengerParameters parameters)
         {
             var passengers = await _repository.GetAllAsync(parameters);
             var dtoItems = _mapper.Map<List<PassengerResponseDTO>>(passengers);
@@ -36,6 +37,7 @@ namespace Airport.BLL.DTOs.Services
                 passengers.PageNumber,
                 passengers.PageSize
             );
+
         }
 
         public async Task<PassengerResponseDTO> GetByIdAsync(int id)

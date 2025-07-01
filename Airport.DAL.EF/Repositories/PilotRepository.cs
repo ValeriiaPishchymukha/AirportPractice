@@ -1,4 +1,6 @@
 ﻿using Airport.DAL.EF.Entities;
+using Airport.DAL.EF.Entities.HelpModels.Filtration;
+using Airport.DAL.EF.Helpers;
 using Airport.DAL.EF.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,6 +15,30 @@ namespace Airport.DAL.EF.Repositories
     {
         public PilotRepository(AirportDbContext context) : base(context) { }
 
+        public async Task<PagedList<Pilot>> GetAllAsync(PilotParameters parameters)
+        {
+            var query = _dbSet.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(parameters.FirstName))
+                query = query.Where(p => p.FirstName.Contains(parameters.FirstName));
+
+            if (!string.IsNullOrWhiteSpace(parameters.LastName))
+                query = query.Where(p => p.LastName.Contains(parameters.LastName));
+
+            if (parameters.MinAge.HasValue)
+                query = query.Where(p => p.Age >= parameters.MinAge.Value);
+
+            if (parameters.MaxAge.HasValue)
+                query = query.Where(p => p.Age <= parameters.MaxAge.Value);
+
+            if (parameters.MinRating.HasValue)
+                query = query.Where(p => p.Rating >= parameters.MinRating.Value);
+
+            if (parameters.MaxRating.HasValue)
+                query = query.Where(p => p.Rating <= parameters.MaxRating.Value);
+
+            return await PagedList<Pilot>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
+        }
         public override async Task<Pilot> GetByIDAsync(int id)
         {
             return await _dbSet

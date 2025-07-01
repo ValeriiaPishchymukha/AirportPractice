@@ -20,7 +20,7 @@ namespace Airport.DAL.EF.Repositories
             _dbSet = _context.Set<Entity>();
         }
 
-        public async Task<PagedList<Entity>> GetAllAsync(Parameters parameters)
+        public virtual async Task<PagedList<Entity>> GetAllAsync(Parameters parameters)
         {
             var query = _dbSet.AsQueryable();
 

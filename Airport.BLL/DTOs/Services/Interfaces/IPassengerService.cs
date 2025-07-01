@@ -1,6 +1,7 @@
 ﻿using Airport.BLL.DTOs.Requests;
 using Airport.BLL.DTOs.Responses;
 using Airport.DAL.EF.Entities.HelpModels;
+using Airport.DAL.EF.Entities.HelpModels.Filtration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Airport.BLL.DTOs.Services.Interfaces
 {
     public interface IPassengerService
     {
-        Task<List<PassengerResponseDTO>> GetAllAsync(Parameters parameters);
+        Task<List<PassengerResponseDTO>> GetAllAsync(PassengerParameters parameters);
         Task<PassengerResponseDTO> GetByIdAsync(int id);
         Task<PassengerResponseDTO> GetByEmailAsync(string email);
         Task<List<PassengerResponseDTO>> SearchByNameAsync(string partialName);
