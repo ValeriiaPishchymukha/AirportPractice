@@ -15,5 +15,7 @@ namespace Airport.DAL.EF.Entities.HelpModels.Filtration
         public decimal? MaxTicketPrice { get; set; }
         public DateTime? DepartureAfter { get; set; }
         public DateTime? DepartureBefore { get; set; }
+
+        public string? OrderBy { get; set; }
     }
 }

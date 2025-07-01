@@ -41,6 +41,62 @@ namespace Airport.DAL.EF.Repositories
             if (parameters.MaxTicketPrice.HasValue)
                 query = query.Where(fd => fd.TicketPrice <= parameters.MaxTicketPrice.Value);
 
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            {
+                switch (parameters.OrderBy.ToLower())
+                {
+                    case "id":
+                        query = query.OrderBy(fd => fd.Id);
+                        break;
+                    case "id desc":
+                        query = query.OrderByDescending(fd => fd.Id);
+                        break;
+
+                    case "airportid":
+                        query = query.OrderBy(fd => fd.AirportId);
+                        break;
+                    case "airportid desc":
+                        query = query.OrderByDescending(fd => fd.AirportId);
+                        break;
+
+                    case "departure":
+                        query = query.OrderBy(fd => fd.Departure);
+                        break;
+                    case "departure desc":
+                        query = query.OrderByDescending(fd => fd.Departure);
+                        break;
+
+                    case "aircraftid":
+                        query = query.OrderBy(fd => fd.AircraftId);
+                        break;
+                    case "aircraftid desc":
+                        query = query.OrderByDescending(fd => fd.AircraftId);
+                        break;
+
+                    case "passengerid":
+                        query = query.OrderBy(fd => fd.PassengerId);
+                        break;
+                    case "passengerid desc":
+                        query = query.OrderByDescending(fd => fd.PassengerId);
+                        break;
+
+                    case "ticketprice":
+                        query = query.OrderBy(fd => fd.TicketPrice);
+                        break;
+                    case "ticketprice desc":
+                        query = query.OrderByDescending(fd => fd.TicketPrice);
+                        break;
+
+                    default:
+                        query = query.OrderBy(fd => fd.Id);
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(fd => fd.Id);
+            }
+
             return await PagedList<FlightDestination>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
         }
 

@@ -35,6 +35,50 @@ namespace Airport.DAL.EF.Repositories
             if (parameters.MaxFlightHours.HasValue)
                 query = query.Where(a => a.FlightHours <= parameters.MaxFlightHours.Value);
 
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            {
+                switch (parameters.OrderBy.ToLower())
+                {
+                    case "id":
+                        query = query.OrderBy(a => a.Id);
+                        break;
+                    case "id desc":
+                        query = query.OrderByDescending(a => a.Id);
+                        break;
+                    case "manufacturer":
+                        query = query.OrderBy(a => a.Manufacturer);
+                        break;
+                    case "manufacturer desc":
+                        query = query.OrderByDescending(a => a.Manufacturer);
+                        break;
+                    case "model":
+                        query = query.OrderBy(a => a.Model);
+                        break;
+                    case "model desc":
+                        query = query.OrderByDescending(a => a.Model);
+                        break;
+                    case "year":
+                        query = query.OrderBy(a => a.Year);
+                        break;
+                    case "year desc":
+                        query = query.OrderByDescending(a => a.Year);
+                        break;
+                    case "flighthours":
+                        query = query.OrderBy(a => a.FlightHours);
+                        break;
+                    case "flighthours desc":
+                        query = query.OrderByDescending(a => a.FlightHours);
+                        break;
+                    default:
+                        query = query.OrderBy(a => a.Id);
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(a => a.Id);
+            }
+
             return await PagedList<Aircraft>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
         }
 

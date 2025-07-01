@@ -26,6 +26,39 @@ namespace Airport.DAL.EF.Repositories
             if (!string.IsNullOrWhiteSpace(parameters.Email))
                 query = query.Where(p => p.Email.Contains(parameters.Email));
 
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            {
+                switch (parameters.OrderBy.ToLower())
+                {
+                    case "id":
+                        query = query.OrderBy(p => p.Id);
+                        break;
+                    case "id desc":
+                        query = query.OrderByDescending(p => p.Id);
+                        break;
+                    case "fullname":
+                        query = query.OrderBy(p => p.FullName);
+                        break;
+                    case "fullname desc":
+                        query = query.OrderByDescending(p => p.FullName);
+                        break;
+                    case "email":
+                        query = query.OrderBy(p => p.Email);
+                        break;
+                    case "email desc":
+                        query = query.OrderByDescending(p => p.Email);
+                        break;
+                    default:
+                        query = query.OrderBy(p => p.Id);
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(p => p.Id);
+            }
+
+
             return await PagedList<Passenger>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
         }
 

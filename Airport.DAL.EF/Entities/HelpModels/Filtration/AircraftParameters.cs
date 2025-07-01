@@ -13,6 +13,8 @@ namespace Airport.DAL.EF.Entities.HelpModels.Filtration
         public int? MinYear { get; set; }
         public int? MaxYear { get; set; }
         public int? MaxFlightHours { get; set; }
+
+        public string? OrderBy { get; set; }
     }
 
 }

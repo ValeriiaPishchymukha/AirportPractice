@@ -10,5 +10,7 @@ namespace Airport.DAL.EF.Entities.HelpModels.Filtration
     {
         public string? Name { get; set; }
         public string? Country { get; set; }
+
+        public string? OrderBy { get; set; }
     }
 }

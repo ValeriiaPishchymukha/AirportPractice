@@ -23,6 +23,32 @@ namespace Airport.DAL.EF.Repositories
             if (!string.IsNullOrWhiteSpace(parameters.TypeName))
                 query = query.Where(a => a.TypeName.Contains(parameters.TypeName));
 
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            {
+                switch (parameters.OrderBy.ToLower())
+                {
+                    case "id":
+                        query = query.OrderBy(a => a.Id);
+                        break;
+                    case "id desc":
+                        query = query.OrderByDescending(a => a.Id);
+                        break;
+                    case "typename":
+                        query = query.OrderBy(a => a.TypeName);
+                        break;
+                    case "typename desc":
+                        query = query.OrderByDescending(a => a.TypeName);
+                        break;
+                    default:
+                        query = query.OrderBy(a => a.Id); 
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(a => a.Id);
+            }
+
             return await PagedList<AircraftType>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
         }
         public async Task<List<AircraftType>> GetTypesWithAircraftsAsync()

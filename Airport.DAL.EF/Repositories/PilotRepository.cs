@@ -37,6 +37,50 @@ namespace Airport.DAL.EF.Repositories
             if (parameters.MaxRating.HasValue)
                 query = query.Where(p => p.Rating <= parameters.MaxRating.Value);
 
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            {
+                switch (parameters.OrderBy.ToLower())
+                {
+                    case "id":
+                        query = query.OrderBy(p => p.Id);
+                        break;
+                    case "id desc":
+                        query = query.OrderByDescending(p => p.Id);
+                        break;
+                    case "firstname":
+                        query = query.OrderBy(p => p.FirstName);
+                        break;
+                    case "firstname desc":
+                        query = query.OrderByDescending(p => p.FirstName);
+                        break;
+                    case "lastname":
+                        query = query.OrderBy(p => p.LastName);
+                        break;
+                    case "lastname desc":
+                        query = query.OrderByDescending(p => p.LastName);
+                        break;
+                    case "age":
+                        query = query.OrderBy(p => p.Age);
+                        break;
+                    case "age desc":
+                        query = query.OrderByDescending(p => p.Age);
+                        break;
+                    case "rating":
+                        query = query.OrderBy(p => p.Rating);
+                        break;
+                    case "rating desc":
+                        query = query.OrderByDescending(p => p.Rating);
+                        break;
+                    default:
+                        query = query.OrderBy(p => p.Id);
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(p => p.Id);
+            }
+
             return await PagedList<Pilot>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
         }
         public override async Task<Pilot> GetByIDAsync(int id)

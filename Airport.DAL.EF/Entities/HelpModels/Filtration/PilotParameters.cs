@@ -14,5 +14,7 @@ namespace Airport.DAL.EF.Entities.HelpModels.Filtration
         public int? MaxAge { get; set; }
         public double? MinRating { get; set; }
         public double? MaxRating { get; set; }
+
+        public string? OrderBy { get; set; }
     }
 }

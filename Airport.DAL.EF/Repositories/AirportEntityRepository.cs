@@ -26,6 +26,38 @@ namespace Airport.DAL.EF.Repositories
             if (!string.IsNullOrWhiteSpace(parameters.Country))
                 query = query.Where(a => a.Country.Contains(parameters.Country));
 
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            {
+                switch (parameters.OrderBy.ToLower())
+                {
+                    case "id":
+                        query = query.OrderBy(a => a.Id);
+                        break;
+                    case "id desc":
+                        query = query.OrderByDescending(a => a.Id);
+                        break;
+                    case "name":
+                        query = query.OrderBy(a => a.Name);
+                        break;
+                    case "name desc":
+                        query = query.OrderByDescending(a => a.Name);
+                        break;
+                    case "country":
+                        query = query.OrderBy(a => a.Country);
+                        break;
+                    case "country desc":
+                        query = query.OrderByDescending(a => a.Country);
+                        break;
+                    default:
+                        query = query.OrderBy(a => a.Id);
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(a => a.Id);
+            }
+
 
             return await PagedList<AirportEntity>.CreateAsync(query, parameters.PageNumber, parameters.PageSize);
         }
