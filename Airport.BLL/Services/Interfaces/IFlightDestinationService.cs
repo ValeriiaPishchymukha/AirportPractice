@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Airport.BLL.DTOs.Services.Interfaces
+namespace Airport.BLL.Services.Interfaces
 {
     public interface IFlightDestinationService
     {

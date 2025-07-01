@@ -1,8 +1,11 @@
-using Airport.BLL.DTOs.Services;
-using Airport.BLL.DTOs.Services.Interfaces;
+using Airport.BLL.DTOs.Validation;
+using Airport.BLL.Services;
+using Airport.BLL.Services.Interfaces;
 using Airport.DAL.EF;
 using Airport.DAL.EF.Interfaces;
 using Airport.DAL.EF.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApplicationAirport
@@ -42,6 +45,17 @@ namespace WebApplicationAirport
 
 
             builder.Services.AddControllers();
+
+            builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddFluentValidationClientsideAdapters();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<AircraftReqDTO_Validator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<AircraftTypeReqDTO_Validator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<AirportEntityReqDTO_Validator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<FlightDestinationReqDTO_Validator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<PassengerReqDTO_Validator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<PilotReqDTO_Validator>();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

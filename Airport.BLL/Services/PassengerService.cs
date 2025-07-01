@@ -1,6 +1,6 @@
 ﻿using Airport.BLL.DTOs.Requests;
 using Airport.BLL.DTOs.Responses;
-using Airport.BLL.DTOs.Services.Interfaces;
+using Airport.BLL.Services.Interfaces;
 using Airport.DAL.EF.Entities;
 using Airport.DAL.EF.Entities.HelpModels;
 using Airport.DAL.EF.Entities.HelpModels.Filtration;
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Airport.BLL.DTOs.Services
+namespace Airport.BLL.Services
 {
     public class PassengerService : IPassengerService
     {

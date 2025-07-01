@@ -1,7 +1,7 @@
 ﻿using Airport.BLL.DTOs.Requests;
 using Airport.BLL.DTOs.Responses;
-using Airport.BLL.DTOs.Services;
-using Airport.BLL.DTOs.Services.Interfaces;
+using Airport.BLL.Services;
+using Airport.BLL.Services.Interfaces;
 using Airport.DAL.EF.Entities.HelpModels;
 using Airport.DAL.EF.Entities.HelpModels.Filtration;
 using Airport.DAL.EF.Helpers;
