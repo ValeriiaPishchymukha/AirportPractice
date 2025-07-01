@@ -11,6 +11,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airport.DAL.EF", "Airport.DAL.EF\Airport.DAL.EF.csproj", "{2B38505C-6FC6-4FA5-A0DF-FABCF3AF9176}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airport.BLL", "Airport.BLL\Airport.BLL.csproj", "{F9FD827B-FF9E-440B-A736-7CEB8CD1E501}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2B38505C-6FC6-4FA5-A0DF-FABCF3AF9176} = {2B38505C-6FC6-4FA5-A0DF-FABCF3AF9176}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

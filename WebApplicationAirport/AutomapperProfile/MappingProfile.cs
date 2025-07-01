@@ -1,6 +1,7 @@
-﻿using AutoMapper;
-using Airport.DAL.EF.Entities;
+﻿using Airport.BLL.DTOs.Requests;
 using Airport.BLL.DTOs.Responses;
+using Airport.DAL.EF.Entities;
+using AutoMapper;
 
 public class MappingProfile : Profile
 {
@@ -29,5 +30,22 @@ public class MappingProfile : Profile
 
         CreateMap<Pilot, PilotFullResponseDTO>()
             .ForMember(dest => dest.Aircrafts, opt => opt.MapFrom(src => src.PilotAircrafts.Select(pa => pa.Aircraft)));
+
+
+
+
+        CreateMap<AircraftReqDTO, Aircraft>()
+            .ForMember(dest => dest.PilotAircrafts, opt => opt.Ignore()); 
+
+        CreateMap<AircraftTypeReqDTO, AircraftType>();
+
+        CreateMap<AirportEntityReqDTO, AirportEntity>();
+
+        CreateMap<FlightDestinationReqDTO, FlightDestination>();
+
+        CreateMap<PassengerReqDTO, Passenger>();
+
+        CreateMap<PilotReqDTO, Pilot>()
+            .ForMember(dest => dest.PilotAircrafts, opt => opt.Ignore());
     }
 }
