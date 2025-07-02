@@ -57,7 +57,6 @@ namespace WebApplicationAirport.Controllers
             return Ok(response);
         }
 
-
         [HttpPost("revoke-token")]
         public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest model)
         {
@@ -94,7 +93,7 @@ namespace WebApplicationAirport.Controllers
             var user = _userService.GetById(id);
             return Ok(user.RefreshTokens);
         }
-
+        
 
     }
 }
