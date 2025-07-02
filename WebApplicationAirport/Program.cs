@@ -2,11 +2,17 @@ using Airport.BLL.DTOs.Validation;
 using Airport.BLL.Services;
 using Airport.BLL.Services.Interfaces;
 using Airport.DAL.EF;
+using Airport.DAL.EF.Helpers;
 using Airport.DAL.EF.Interfaces;
 using Airport.DAL.EF.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApplicationAirport
 {
@@ -16,8 +22,37 @@ namespace WebApplicationAirport
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddAuthorization();
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        // вказує, чи валідуватиметься видавець при валідації токена
+                        ValidateIssuer = true,
+                        // Рядок, що представляє видавця
+                        ValidIssuer = AuthOptions.ISSUER,
+                        // Чи валідуватиметься споживач токена
+                        ValidateAudience = true,
+                        // Установка споживача токена
+                        ValidAudience = AuthOptions.AUDIENCE,
+                        // чи валідуватиметься час існування
+                        ValidateLifetime = true,
+                        // встановлення ключа безпеки
+                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        // валідація ключа безпеки
+                        ValidateIssuerSigningKey = true,
+                        };
+               });
+
+
+
             builder.Services.AddDbContext<AirportDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AirportDbContext>()
+                .AddDefaultTokenProviders();
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
@@ -72,6 +107,7 @@ namespace WebApplicationAirport
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

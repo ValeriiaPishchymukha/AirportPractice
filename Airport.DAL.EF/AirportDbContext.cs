@@ -1,4 +1,6 @@
 ﻿using Airport.DAL.EF.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Airport.DAL.EF
 {
-    public class AirportDbContext : DbContext
+    public class AirportDbContext : IdentityDbContext<IdentityUser>
     {
         public AirportDbContext(DbContextOptions<AirportDbContext> options)
             : base(options)
