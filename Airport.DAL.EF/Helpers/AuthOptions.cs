@@ -9,10 +9,11 @@ namespace Airport.DAL.EF.Helpers
 {
     public class AuthOptions
     {
-        public const string ISSUER = "MyAuthServer"; // Token issuer
-        public const string AUDIENCE = "MyAuthClient"; // Token audience
-        private const string KEY = "mysupersecret_secretkey!123"; // Encryption key
+        public const string Issuer = "MyAuthServer"; // Token issuer
+        public const string Audience = "MyAuthClient"; // Token audience
+        public const string Key = "ThisIsASecretKeyThatIsAtLeast32Chars!"; // Encryption key
+        public const int DurationInMinutes = 60;
         public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
     }
 }

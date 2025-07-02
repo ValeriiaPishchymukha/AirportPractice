@@ -1,4 +1,5 @@
 ﻿using Airport.DAL.EF.Entities;
+using Airport.DAL.EF.Entities.HelpModels.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Airport.DAL.EF
 {
-    public class AirportDbContext : IdentityDbContext<IdentityUser>
+    public class AirportDbContext : IdentityDbContext<ApplicationUser>
     {
         public AirportDbContext(DbContextOptions<AirportDbContext> options)
             : base(options)
@@ -594,6 +595,26 @@ namespace Airport.DAL.EF
                 new FlightDestination { Id = 100, AirportId = 42, Departure = DateTime.Parse("2020-12-16 21:08:50"), AircraftId = 68, PassengerId = 31, TicketPrice = 420.32m }
             );
 
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole
+                {
+                    Id = "1",
+                    Name = "Administrator",
+                    NormalizedName = "ADMINISTRATOR"
+                },
+                new IdentityRole
+                {
+                    Id = "2",
+                    Name = "Moderator",
+                    NormalizedName = "MODERATOR"
+                },
+                new IdentityRole
+                {
+                    Id = "3",
+                    Name = "User",
+                    NormalizedName = "USER"
+                }
+            );
 
             base.OnModelCreating(modelBuilder);
         }

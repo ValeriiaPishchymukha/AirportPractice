@@ -5,6 +5,8 @@ using Airport.BLL.Services.Interfaces;
 using Airport.DAL.EF.Entities.HelpModels;
 using Airport.DAL.EF.Entities.HelpModels.Filtration;
 using Airport.DAL.EF.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -61,6 +63,7 @@ namespace WebApplicationAirport.Controllers
             return Ok(pilot);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] PilotReqDTO dto)
         {
@@ -68,6 +71,7 @@ namespace WebApplicationAirport.Controllers
             return Ok();
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] PilotReqDTO dto)
         {
@@ -75,6 +79,7 @@ namespace WebApplicationAirport.Controllers
             return NoContent();
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

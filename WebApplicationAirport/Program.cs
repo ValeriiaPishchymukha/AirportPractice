@@ -1,7 +1,9 @@
 using Airport.BLL.DTOs.Validation;
 using Airport.BLL.Services;
 using Airport.BLL.Services.Interfaces;
+using Airport.BLL.Services.Interfaces.JWTAuthentication.WebApi.Services;
 using Airport.DAL.EF;
+using Airport.DAL.EF.Entities.HelpModels.Identity;
 using Airport.DAL.EF.Helpers;
 using Airport.DAL.EF.Interfaces;
 using Airport.DAL.EF.Repositories;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace WebApplicationAirport
 {
@@ -23,34 +26,42 @@ namespace WebApplicationAirport
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddAuthorization();
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        // вказує, чи валідуватиметься видавець при валідації токена
-                        ValidateIssuer = true,
-                        // Рядок, що представляє видавця
-                        ValidIssuer = AuthOptions.ISSUER,
-                        // Чи валідуватиметься споживач токена
-                        ValidateAudience = true,
-                        // Установка споживача токена
-                        ValidAudience = AuthOptions.AUDIENCE,
-                        // чи валідуватиметься час існування
-                        ValidateLifetime = true,
-                        // встановлення ключа безпеки
-                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                        // валідація ключа безпеки
-                        ValidateIssuerSigningKey = true,
-                        };
-               });
+                    ValidateIssuer = true,
+                    ValidIssuer = AuthOptions.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = AuthOptions.Audience,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                    ValidateIssuerSigningKey = true,
+                };
 
+                options.Events = new JwtBearerEvents
+                {
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.StatusCode = 401;
+                        context.Response.ContentType = "application/json";
+                        var payload = System.Text.Json.JsonSerializer.Serialize(new { error = "Unauthorized" });
+                        return context.Response.WriteAsync(payload);
+                    }
+                };
+            });
 
 
             builder.Services.AddDbContext<AirportDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AirportDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -78,6 +89,9 @@ namespace WebApplicationAirport
             builder.Services.AddScoped<IPilotService, PilotService>();
             builder.Services.AddScoped<IPilotRepository, PilotRepository>();
 
+            builder.Services.AddScoped<IUserService, UserService>();
+
+
 
             builder.Services.AddControllers();
 
@@ -93,7 +107,34 @@ namespace WebApplicationAirport
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            //builder.Services.AddSwaggerGen();
+
+
+            //experiment ----------------------------------------------------------------
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                {
+                    new OpenApiSecurityScheme{
+                        Reference = new OpenApiReference{
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[]{}
+                }});
+            });
+            //end of it ----------------------------------------------------------------
+
 
             var app = builder.Build();
 
@@ -104,11 +145,11 @@ namespace WebApplicationAirport
                 app.UseSwaggerUI();
             }
 
-
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
 
 
             app.MapControllers();
