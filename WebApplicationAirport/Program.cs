@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using WebApplicationAirport.Middleware;
 
 namespace WebApplicationAirport
 {
@@ -42,18 +44,6 @@ namespace WebApplicationAirport
                     ValidateLifetime = true,
                     IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                     ValidateIssuerSigningKey = true,
-                };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnChallenge = context =>
-                    {
-                        context.HandleResponse();
-                        context.Response.StatusCode = 401;
-                        context.Response.ContentType = "application/json";
-                        var payload = System.Text.Json.JsonSerializer.Serialize(new { error = "Unauthorized" });
-                        return context.Response.WriteAsync(payload);
-                    }
                 };
             });
 
@@ -144,6 +134,52 @@ namespace WebApplicationAirport
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            app.UseStatusCodePages(async context =>
+            {
+                var response = context.HttpContext.Response;
+                response.ContentType = "application/json";
+
+                string message = context.HttpContext.Request.Path;
+
+                switch (response.StatusCode)
+                {
+                    case 401:
+                        await response.WriteAsync(JsonConvert.SerializeObject(new
+                        {
+                            StatusCode = 401,
+                            Message = "Неавторизований доступ",
+                            Status = "ERROR"
+                        }));
+                        break;
+                    case 403:
+                        await response.WriteAsync(JsonConvert.SerializeObject(new
+                        {
+                            StatusCode = 403,
+                            Message = "Доступ заборонено",
+                            Status = "ERROR"
+                        }));
+                        break;
+                    case 500:
+                        await response.WriteAsync(JsonConvert.SerializeObject(new
+                        {
+                            StatusCode = 500,
+                            Message = "Внутрішня помилка сервера",
+                            Status = "ERROR"
+                        }));
+                        break;
+                    default:
+                        await response.WriteAsync(JsonConvert.SerializeObject(new
+                        {
+                            StatusCode = response.StatusCode,
+                            Message = "Сталася помилка",
+                            Status = "ERROR"
+                        }));
+                        break;
+                }
+            });
+
 
             app.UseHttpsRedirection();
 
